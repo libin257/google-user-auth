@@ -1,0 +1,9 @@
+# 本机 OAuth Client 配置与授权结果，绝不提交。
+google-oauth-client.json
+google-user-token.json
+.env
+
+# Python 运行产物与 Skill 临时数据。
+__pycache__/
+*.py[cod]
+tmp/
