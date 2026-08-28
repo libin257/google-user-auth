@@ -18,8 +18,6 @@ allowed-tools: Bash(google-user-auth:*)
 
 ## 已配置账号
 
-- Google 账号：`zhu15801283521@gmail.com`
-- OAuth 项目：`openclaw-api-491513`
 - 凭证文件：`google-oauth-client.json` 和 `google-user-token.json`（权限 `600`）
 - 已授权范围：Gmail、Analytics、Indexing、Site Verification、Search Console
 
@@ -29,20 +27,6 @@ allowed-tools: Bash(google-user-auth:*)
 2. 授权码交换：`exchange_code.py` 使用回调中的一次性 `code` 向 `https://oauth2.googleapis.com/token` 换取 `refresh_token`，保存 `google-user-token.json`；调用方不单独执行该脚本。
 3. 后续刷新：业务脚本运行 `scripts/get-token.sh <scope>`；它读取 `refresh_token`，向 Google 换取短期 `access_token`。
 4. 业务调用：把 `get-token.sh` 输出的 `access_token` 放入 `Authorization: Bearer`，交给 Gmail、GA、GSC、Site Verification 或 Indexing API。
-
-日常 Gmail 收码的实际调用顺序：
-
-```bash
-# 先用 refresh_token 换取短期 Gmail access_token；不要打印或写入日志
-GMAIL_ACCESS_TOKEN=$(/root/.openclaw/skills/google-user-auth/scripts/get-token.sh \
-  "https://www.googleapis.com/auth/gmail.readonly")
-# 将短期 access_token 传给邮件脚本；脚本调用原生 Gmail API
-python3 /root/.openclaw/skills/verification/scripts/search_gmail.py \
-  'in:anywhere newer_than:1d' \
-  --access-token "${GMAIL_ACCESS_TOKEN}" \
-  --max-results 20 \
-  --urls
-```
 
 ## 安全约束
 
