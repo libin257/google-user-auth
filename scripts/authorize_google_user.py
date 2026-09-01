@@ -39,7 +39,9 @@ def main():
         def do_GET(self):
             q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             result.update({k: v[0] for k, v in q.items()})
-            self.send_response(200); self.end_headers()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
             self.wfile.write("授权结果已收到，可以关闭此页面。".encode())
             threading.Thread(target=self.server.shutdown, daemon=True).start()
         def log_message(self, *_): pass
